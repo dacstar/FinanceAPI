@@ -38,6 +38,8 @@ public class KaKaoExamController {
 	public void test() throws Exception {
         //연도별 총합을 구하기
 		HousesupplyEntity test = iFinanceService.getyearTotal(2015);
+		
+		
 	}
 
 }
