@@ -23,9 +23,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
+    // https://mvnrepository.com/artifact/com.opencsv/opencsv
+    // https://mvnrepository.com/artifact/com.opencsv/opencsv
+compile group: 'com.opencsv', name: 'opencsv', version: '5.0'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
-	compile group: 'com.opencsv', name: 'opencsv', version: '4.0'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

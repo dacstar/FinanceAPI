@@ -19,7 +19,6 @@ public class KaKaoExamController {
 	public void init() throws Exception {
 		System.out.println("гого");
 		int inputdate = iFinanceService.putDate();
-		
 		if(inputdate ==0) {
 			throw new Exception("init Error");
 		}
