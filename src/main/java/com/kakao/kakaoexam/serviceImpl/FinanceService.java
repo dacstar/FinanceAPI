@@ -10,6 +10,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kakao.kakaoexam.Dto.SupplyDto;
 import com.kakao.kakaoexam.entity.HousesupplyEntity;
 import com.kakao.kakaoexam.repository.HousesupplyRespository;
 import com.kakao.kakaoexam.service.IFinanceService;
@@ -26,7 +27,12 @@ public class FinanceService implements IFinanceService{
 	private HousesupplyRespository housesupplyRespository;
 	
 	//은행의 갯수
-    final int bank= 11;
+    private final int bank= 11;
+    //오래된 년도
+    private final int older_year=2005;
+    //최신년도
+    private final int latest_year=2017; 
+    
 	@Override
 	public int putDate() {
 		// TODO Auto-generated method stub
@@ -95,23 +101,13 @@ public class FinanceService implements IFinanceService{
 	}
 	
 	@Override
-	public HousesupplyEntity getyearTotal(long year) {
+	
+	//연도를 이용해 공급가 조회 
+	public List<HousesupplyEntity> getyearTotal(long year) {
 		// TODO Auto-generated method stub
-		 HousesupplyEntity h;
-		Iterable<HousesupplyEntity> supplyInfIter;
-		
-		 List<HousesupplyEntity> supplyInfList = new LinkedList<>();
-		 
-		 supplyInfList =housesupplyRespository.findByyear(year);
-         
+		 List<HousesupplyEntity> supplyInfList = housesupplyRespository.findByyear(year);
 
-	        
-	        for(int i=0;i<supplyInfList.size();i++) {
-	        	System.out.println(supplyInfList.get(i).toString());
-	        }
-	        
-	        
-		return null;
+		return supplyInfList;
 	}
 	
 	

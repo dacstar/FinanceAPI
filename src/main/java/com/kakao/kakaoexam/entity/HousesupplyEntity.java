@@ -2,7 +2,6 @@ package com.kakao.kakaoexam.entity;
 
 import javax.persistence.*;
 
-import lombok.Builder;
 import lombok.Data;
 
 @Entity
@@ -32,7 +31,6 @@ public class HousesupplyEntity {
     }
     
     // CSV 파일 입력 생성자
-    @Builder
 	public HousesupplyEntity(String[] str) {
 		this.year = Long.parseLong(str[0]);
 		this.month =Long.parseLong(str[1]); 
@@ -47,12 +45,7 @@ public class HousesupplyEntity {
 		this.etc = str[10];
 	}
 
-	@Override
-	public String toString() {
-		return "HousesupplyEntity [month=" + month + ", year=" + year + ", housefund=" + housefund + ", kb=" + kb
-				+ ", woori=" + woori + ", sh=" + sh + ", city=" + city + ", hana=" + hana + ", nh=" + nh + ", keb="
-				+ keb + ", etc=" + etc + "]";
-	}
+	
     
     
     

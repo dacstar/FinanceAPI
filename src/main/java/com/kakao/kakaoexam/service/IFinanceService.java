@@ -9,7 +9,7 @@ public interface IFinanceService {
 	
 	public int putDate();
 	public List<HousesupplyEntity> getSupplyList();
-	public HousesupplyEntity getyearTotal(long year);
+	public List<HousesupplyEntity> getyearTotal(long year);
 	
 	
 

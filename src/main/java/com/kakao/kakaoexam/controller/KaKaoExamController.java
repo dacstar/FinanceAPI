@@ -37,7 +37,17 @@ public class KaKaoExamController {
 	@RequestMapping(value ="/test")
 	public void test() throws Exception {
         //연도별 총합을 구하기
-		HousesupplyEntity test = iFinanceService.getyearTotal(2015);
+		int older_year=Integer.MAX_VALUE;
+		int latest_year=Integer.MIN_VALUE;
+		
+		
+		//모든 공급 내역 가져오기
+		List<HousesupplyEntity> list = iFinanceService.getSupplyList();
+		
+		
+		List<HousesupplyEntity>test = iFinanceService.getyearTotal(2015);
+		
+		
 		
 		
 	}
