@@ -32,7 +32,7 @@ public class FinanceService implements IFinanceService{
 			
 			while(data.readLine() != null ) {
 				ArrayList<String[]> list = new ArrayList<>();
-			
+			  
           
 				
 				
