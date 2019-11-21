@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -118,21 +119,19 @@ public class FinanceService implements IFinanceService{
 	@Override
 	public List<SupplyDto> getTotalsupply() {
 		// TODO Auto-generated method stub
-		 int older_year=Integer.MAX_VALUE;
-	     int latest_year=Integer.MIN_VALUE;
-	      List<SupplyDto> supplylist = new LinkedList<>();
+
+		/* 최신연도와 오래된 연도 가져오기  */
+		List<Integer> yearlist = this.getYear();
+
+		 int older_year=yearlist.get(0);
+		 int latest_year=yearlist.get(1);
+		 
+
+	    List<SupplyDto> supplylist = new LinkedList<>();
 	      
 	      
-	      /*                    전체 주택 공급현황 가져오기                     */
-	      List<HousesupplyEntity> list = this.getSupplyList();
 	      
-	      for(int i=0;i<list.size();i++) {
-	    	  //제일 오래된 연도 구하기
-	         older_year=Math.min(older_year, list.get(i).getYear());
-	         //제일 최신 연도 구하기
-	         latest_year=Math.max(older_year, list.get(i).getYear());
-	      }
-	      
+	      /*  연도 테스트 */
 	      System.out.println(older_year);
 	      System.out.println(latest_year);
 	      
@@ -154,7 +153,8 @@ public class FinanceService implements IFinanceService{
 	         int hana=0;
 	         int nh=0;
 	         int keb=0;
-	         int etc=0;
+			 int etc=0;
+			 int moon=0;
 	         
 	         
 	         List<Map<String,Integer>> detail_amount = new LinkedList<>();
@@ -173,7 +173,7 @@ public class FinanceService implements IFinanceService{
 	            
 
 	               String KB=test.get(month).getKb();
-	               KB=KB.replace(",","");
+				   KB=KB.replace(",","");
 	               kb+=Integer.parseInt(KB);
 	               total_amount+=Integer.parseInt(KB);
 	               
@@ -198,19 +198,23 @@ public class FinanceService implements IFinanceService{
 	               total_amount+=Integer.parseInt(Hana);
 	               
 	               String Nh=test.get(month).getNh();
-	               Nh=Hana.replace(",","");
+	               Nh=Nh.replace(",","");
 	               nh+=Integer.parseInt(Nh);
 	               total_amount+=Integer.parseInt(Nh);
 	               
 	               String Keb=test.get(month).getKeb();
-	               Keb=Hana.replace(",","");
+	               Keb=Keb.replace(",","");
 	               keb+=Integer.parseInt(Keb);
 	               total_amount+=Integer.parseInt(Keb);
 	               
 	               String Etc=test.get(month).getEtc();
-	               Etc=Hana.replace(",","");
+	               Etc=Etc.replace(",","");
 	               etc+=Integer.parseInt(Etc);
-	               total_amount+=Integer.parseInt(Etc);
+				   total_amount+=Integer.parseInt(Etc);
+				   
+
+				   /* 가장 마지막 Month 구하기 */
+				   moon=month;
 	   
 
 	         }
@@ -229,7 +233,8 @@ public class FinanceService implements IFinanceService{
 	         detail_amount.add(map);
 	        
 	         
-	         //주택공급현황 배열 출력을 위한  배열 생성자.
+			 //주택공급현황 배열 출력을 위한  배열 생성자.
+			 
 	         supplylist.add(new SupplyDto(year+"년", total_amount, detail_amount));
 	
 	      }
@@ -274,8 +279,9 @@ public class FinanceService implements IFinanceService{
 			       }
 			    }
 			}
-			
-			MaxsupplyDto maxsupplydto = new MaxsupplyDto(supplydto.getYear(),bank);
+			//형식 맞추기 Year -> Integer 변환
+			String year=supplydto.getYear().replace("년","");
+			MaxsupplyDto maxsupplydto = new MaxsupplyDto(Integer.parseInt(year),bank);
 			maxsupplylist.add(maxsupplydto);
 		}
 		
@@ -290,56 +296,86 @@ public class FinanceService implements IFinanceService{
 		/* 전체 주택 공급량을 가져온다 */
 		List<SupplyDto> supplylist=this.getTotalsupply();
 		List<KebDto> keblist = new LinkedList<>();
-		double Maxamount=Integer.MIN_VALUE;
-		double Minamount=Integer.MAX_VALUE;
-		double max=Integer.MIN_VALUE;
-		double min=Integer.MAX_VALUE;
-		int maxyear=0;
-		int minyear=0;
+
 		for (SupplyDto supplydto : supplylist) {
-			double kebavg=0;
 			double kebamount=0;
-			//평균 월을 세기위한 카운터
-			int count=0;
-			
+			double avg=0;
+			long avgmount=0;
+			//연도 형식 변환.
+			int year=Integer.parseInt(supplydto.getYear().replace("년", ""));
+			int month=this.findMonth(year);
+			System.out.println("Kebavg"+" "+year+" "+month);
 			List<Map<String,Integer>> detail_amount = supplydto.getDetail_amount();
 			for(Map<String,Integer> map : detail_amount) {
 	            
 				for (String key : map.keySet()){
                     
 					if(key.contains("외환은행")) {
-				          		count++;
-				          		kebamount+=map.get(key);
-						
+				         
+								  kebamount+=map.get(key);
+								  avg = kebamount/month;
+								  avgmount=Math.round(avg);
+								  /*  0일경우 지원을 아에 받지 않은 경우이기 때문에 제외 시킨다. */
+								  if(avgmount==0){
+									  continue;
+								  }else{
+								  		keblist.add(new KebDto(year,avgmount));
+								  }
+						        
 					}else {
-						continue;
+							continue;
 					}
 			    }
 			}
-			kebavg=kebamount/count;
-			max=Math.max(Maxamount, kebavg);
-			min=Math.min(Minamount, kebavg);
-			
-			if(max !=Maxamount) {
-				Maxamount=max;
-				String year=supplydto.getYear().replace("년", "");
-				maxyear=Integer.parseInt(year);
-			}else if(min !=Minamount) {
-				Minamount=min;
-				String year=supplydto.getYear().replace("년", "");
-				minyear=Integer.parseInt(year);
-				
-			}
-			keblist.add(new KebDto(maxyear,minyear,Math.round(Maxamount),Math.round(Minamount)));
-			
-			
 		}
+
+
+		//평균별 정렬
+		System.out.println("왔어!!");
+		Collections.sort(keblist);
 		
 		for(KebDto k: keblist) {
 			System.out.println(k.toString());
 		}
 		
 		return keblist;
+	}
+
+
+    /* MAX momth를 찾기위한 메소드 */
+	@Override
+	public int findMonth(int year) {
+
+        //연도별 정보를 가져온다.
+		List<HousesupplyEntity>yearlist = this.getyearTotal(year);
+
+		//연도 크기가 곧 Month의 최종달.
+		int month=yearlist.size();
+		
+
+
+		return month;
+	}
+
+	@Override
+	public List<Integer> getYear() {
+        //가장 최신과 오래된 연도를 담을 List
+		List<Integer> yearlist =new LinkedList<>();
+
+		/*                    전체 주택 공급현황 가져오기                     */
+		List<HousesupplyEntity> supplylist = this.getSupplyList();
+		int older_year=Integer.MAX_VALUE;
+		int latest_year=Integer.MIN_VALUE;
+		for(int i=0;i<supplylist.size();i++) {
+			//제일 오래된 연도 구하기
+		   older_year=Math.min(older_year, supplylist.get(i).getYear());
+		   //제일 최신 연도 구하기
+		   latest_year=Math.max(older_year, supplylist.get(i).getYear());
+		}
+		yearlist.add(older_year);
+		yearlist.add(latest_year);
+		
+		return yearlist;
 	}
 	
 	

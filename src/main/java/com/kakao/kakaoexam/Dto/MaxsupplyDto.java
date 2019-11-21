@@ -6,10 +6,10 @@ import lombok.Data;
 @Data
 public class MaxsupplyDto {
 	
-	private String year;
+	private int year;
 	private String bank;
 	
-	public MaxsupplyDto(String year, String bank) {
+	public MaxsupplyDto(int year, String bank) {
 		super();
 		this.year = year;
 		this.bank = bank;

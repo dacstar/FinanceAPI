@@ -3,21 +3,23 @@ package com.kakao.kakaoexam.Dto;
 import java.util.List;
 import java.util.Map;
 
-import lombok.Data;
 import lombok.Getter;
 //Test2�� ����� ���� Dto
+import lombok.Setter;
 
 @Getter
+@Setter
 public class SupplyDto {
 	
-	String year;
-	int total_amount;
-	List<Map<String,Integer>> detail_amount;
+	private String year;
+	private int total_amount;
+	private List<Map<String,Integer>> detail_amount;
 	
 	
 	public SupplyDto(String year, int total_amount, List<Map<String, Integer>> detail_amount) {
 		super();
 		this.year = year;
+		
 		this.total_amount = total_amount;
 		this.detail_amount = detail_amount;
 	}

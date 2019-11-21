@@ -1,27 +1,33 @@
 package com.kakao.kakaoexam.Dto;
 
-public class KebDto {
+public class KebDto implements Comparable<KebDto>  {
 
-		private int maxyear;
-		private int minyear;
-		private long maxamount;
-		private long minamount;
+		private int year;
+		private long amount;
+	
 		
 		
-		public KebDto(int maxyear, int minyear, long maxamount, long minamount) {
+		public KebDto(int year, long amount) {
 			super();
-			this.maxyear = maxyear;
-			this.minyear = minyear;
-			this.maxamount = maxamount;
-			this.minamount = minamount;
+			this.year = year;
+			this.amount = amount;
 		}
 
+	@Override
+	public int compareTo(KebDto o) {
+		// TODO Auto-generated method stub
+		return this.amount > o.amount ? 1 : -1;
+	}
 
-		@Override
-		public String toString() {
-			return "KebDto [maxyear=" + maxyear + ", minyear=" + minyear + ", maxamount=" + maxamount + ", minamount="
-					+ minamount + "]";
-		}
+	@Override
+	public String toString() {
+		return "KebDto [year=" + year + ", amount=" + amount +"]";
+	}
+
+
+
+
+		
 		
 		
 }

@@ -21,6 +21,7 @@ import com.google.gson.JsonParser;
 import com.kakao.kakaoexam.Dto.KebDto;
 import com.kakao.kakaoexam.Dto.MaxsupplyDto;
 import com.kakao.kakaoexam.Dto.SupplyDto;
+import com.kakao.kakaoexam.Dto.Test03Dto;
 import com.kakao.kakaoexam.entity.HousesupplyEntity;
 import com.kakao.kakaoexam.service.IFinanceService;
 
@@ -56,7 +57,11 @@ public class KaKaoExamController {
         *                   */ 
 	   List<SupplyDto> supplylist = iFinanceService.getTotalsupply();
 	   
-	   
+      JsonObject js = new JsonObject();
+      JsonObject js2 = new JsonObject();
+      String name="주택금융 공급현황";
+     
+
       String sts=String.format("{\"name\":\"%s\",%s}", "주택금융 공급현황",new Gson().toJsonTree(supplylist).toString());
 
       return  sts;
@@ -64,7 +69,7 @@ public class KaKaoExamController {
    }
    
    @RequestMapping(value ="/test2")
-   public String test2() throws Exception {
+   public List<MaxsupplyDto> test2() throws Exception {
        //주택 금융 공급현황을 출력하기 위한 Dto
        /*           출력양식을 위한 String fotmat                    */ 
 	   
@@ -74,22 +79,27 @@ public class KaKaoExamController {
 		   System.out.println(max.toString());
 	   }
 
-      return new Gson().toJsonTree(maxsupplylist).toString();
+      return maxsupplylist;
       
    }
    
    @RequestMapping(value ="/test3")
-   public String test3() throws Exception {
+   public Test03Dto test3() throws Exception {
        //주택 금융 공급현황을 출력하기 위한 Dto
        /*           출력양식을 위한 String fotmat                    */ 
 	   
-	  List<KebDto> list = iFinanceService.getKebavg();
+	  List<KebDto> keblist = iFinanceService.getKebavg();
+     Test03Dto test03dto=new Test03Dto();
+     List<KebDto> list = new LinkedList<>();
+
+     list.add(keblist.get(0));
+     list.add(keblist.get(keblist.size()-1));
+
+     test03dto.setKebDto(list);
+    
+
 	  
-	  for(KebDto k : list) {
-		  System.out.println(k.toString());
-	  }
-	  
-	  return "ㅎ";
+	  return test03dto;
       
    }
    

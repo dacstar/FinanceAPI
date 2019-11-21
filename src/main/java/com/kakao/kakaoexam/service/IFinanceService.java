@@ -16,6 +16,8 @@ public interface IFinanceService {
 	public List<SupplyDto> getTotalsupply();
 	public List<MaxsupplyDto> getMaxsupply();
 	public List<KebDto> getKebavg();
+	public int findMonth(int year);
+	public List<Integer> getYear();
 	
 	
 
