@@ -1,21 +1,37 @@
 package com.kakao.kakaoexam.Dto;
 
+import java.util.List;
 import java.util.Map;
 
 import lombok.Data;
-//Test2¹ø Ãâ·ÂÀ» À§ÇÑ Dto
-@Data
+//Test2ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Dto
+
 public class SupplyDto {
 	
 	String year;
 	String total_amount;
-	Map<String,Long>[] detail_amount;
+	List<Map<String,String>> detail_amount;
 	
 	
-	public SupplyDto() {
+	public SupplyDto(String year, String total_amount, List<Map<String, String>> detail_amount) {
 		super();
-		// TODO Auto-generated constructor stub
-	} 
+		this.year = year;
+		this.total_amount = total_amount;
+		this.detail_amount = detail_amount;
+	}
+
+
+	@Override
+	public String toString() {
+		return "SupplyDto [year=" + year + ", total_amount=" + total_amount + ", detail_amount=" + detail_amount + "]";
+	}
+	
+	
+	
+	
+	
+	
+
 	
 	
 	

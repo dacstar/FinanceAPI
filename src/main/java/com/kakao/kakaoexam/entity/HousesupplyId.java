@@ -12,7 +12,7 @@ public class HousesupplyId implements Serializable {
 	
 
 	private static final long serialVersionUID = 1L;
-	private long month;
-	private long year;
+	private int month;
+	private int year;
 
 }

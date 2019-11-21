@@ -26,21 +26,18 @@ public class FinanceService implements IFinanceService{
 	@Autowired
 	private HousesupplyRespository housesupplyRespository;
 	
-	//ÀºÇàÀÇ °¹¼ö
+	//ì€í–‰ê°¯ìˆ˜
     private final int bank= 11;
-    //¿À·¡µÈ ³âµµ
-    private final int older_year=2005;
-    //ÃÖ½Å³âµµ
-    private final int latest_year=2017; 
+
     
 	@Override
 	public int putDate() {
 		// TODO Auto-generated method stub
 		int status=1;
 		
-		//CSV ÆÄÀÏÀÇ ³»¿ëÀ» HousesupplyEntity¿¡ ÀúÀå
+		//CSV íŒŒì¼ ì…ë ¥ ë°›ì•„ì„œ ë‚´ìš©ì„  HousesupplyEntityì— ì €ì¥
 		try {
-			BufferedReader data = new BufferedReader(new FileReader("src/main/resources/static/»çÀü°úÁ¦3.csv"));
+			BufferedReader data = new BufferedReader(new FileReader("src/main/resources/static/ì‚¬ì „ê³¼ì œ3.csv"));
 			
 			while (data.readLine() != null) {
                 
@@ -74,7 +71,7 @@ public class FinanceService implements IFinanceService{
 		
 		return status;
 	}
-	//ÁÖÅÃ±İÀ¶ °ø±ŞÇöÈ² ºĞ¼® µ¥ÀÌÅÍ °¡Á®¿À±â
+	//
 	@Override
 	public List<HousesupplyEntity> getSupplyList() {
 		// TODO Auto-generated method stub
@@ -101,9 +98,8 @@ public class FinanceService implements IFinanceService{
 	}
 	
 	@Override
-	
-	//¿¬µµ¸¦ ÀÌ¿ëÇØ °ø±Ş°¡ Á¶È¸ 
-	public List<HousesupplyEntity> getyearTotal(long year) {
+	//ì—°ë„ ì •ë³´ë¥¼ í†µí•´ ì—°ë„ë³„ ê³µê¸‰ í˜„í™©ê°€ì ¸ì˜¤ê¸°
+	public List<HousesupplyEntity> getyearTotal(int year) {
 		// TODO Auto-generated method stub
 		 List<HousesupplyEntity> supplyInfList = housesupplyRespository.findByyear(year);
 

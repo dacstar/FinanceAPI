@@ -12,28 +12,28 @@ public class HousesupplyEntity {
 	
 	
 	@Id
-	private long month;
+	private int month;
 	@Id
-	private long year;   //¿¬µµ
-	private String housefund; //ÁÖÅÃµµ½Ã±â±İ
-    private String kb; //±¹¹Î
-    private String woori; //¿ì¸®;
-    private String sh; //½ÅÇÑ
-    private String city; //½ÃÆ¼
-    private String hana; //ÇÏ³ª
-    private String nh; //³óÇù
-    private String keb; //¿ÜÈ¯
-    private String etc;  //±âÅ¸
+	private int year;   
+	private String housefund; 
+    private String kb; //ï¿½ï¿½ï¿½ï¿½
+    private String woori; //ï¿½ì¸®;
+    private String sh; //ï¿½ï¿½ï¿½ï¿½
+    private String city; //ï¿½ï¿½Æ¼
+    private String hana; //ï¿½Ï³ï¿½
+    private String nh; //ï¿½ï¿½ï¿½ï¿½
+    private String keb; //ï¿½ï¿½È¯
+    private String etc;  //ï¿½ï¿½Å¸
     
-    //findAll »ı¼ºÀÚ
+    //findAllì„ ìœ„í•œ ìƒì„±ì
     public HousesupplyEntity() {
     	
     }
     
-    // CSV ÆÄÀÏ ÀÔ·Â »ı¼ºÀÚ
+    // CSV ì €ì¥ì„ ìœ„í•œ ìƒì„±ì
 	public HousesupplyEntity(String[] str) {
-		this.year = Long.parseLong(str[0]);
-		this.month =Long.parseLong(str[1]); 
+		this.year = Integer.parseInt(str[0]);
+		this.month =Integer.parseInt(str[1]); 
 		this.housefund = str[2];
 		this.kb = str[3];
 		this.woori = str[4];

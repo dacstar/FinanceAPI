@@ -6,11 +6,11 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.kakao.kakaoexam.entity.HousesupplyEntity;
 
-//ажец╠щю╤.csv ╣╔юлем цЁ╦╝го╠Б ю╖гя  DAO Interface
-public interface HousesupplyRespository extends CrudRepository<HousesupplyEntity,Long> {
+//О©╫О©╫О©╫ц╠О©╫О©╫О©╫.csv О©╫О©╫О©╫О©╫О©╫О©╫ цЁО©╫О©╫О©╫о╠О©╫ О©╫О©╫О©╫О©╫  DAO Interface
+public interface HousesupplyRespository extends CrudRepository<HousesupplyEntity,Integer> {
 	
 	
-	List<HousesupplyEntity> findByyear(long year);
+	List<HousesupplyEntity> findByyear(int year);
 	 
 	
 }
