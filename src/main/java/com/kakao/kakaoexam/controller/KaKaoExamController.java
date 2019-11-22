@@ -91,10 +91,10 @@ public class KaKaoExamController {
 	  List<KebDto> keblist = iFinanceService.getKebavg();
      Test03Dto test03dto=new Test03Dto();
      List<KebDto> list = new LinkedList<>();
-
+     
      list.add(keblist.get(0));
      list.add(keblist.get(keblist.size()-1));
-
+     test03dto.setBank("외환은행");
      test03dto.setKebDto(list);
     
 

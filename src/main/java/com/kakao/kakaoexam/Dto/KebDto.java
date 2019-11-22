@@ -1,5 +1,10 @@
 package com.kakao.kakaoexam.Dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import lombok.Getter;
+
+@Getter
 public class KebDto implements Comparable<KebDto>  {
 
 		private int year;

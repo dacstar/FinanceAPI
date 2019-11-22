@@ -30,6 +30,7 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 	compile group: 'org.json', name: 'json', version: '20190722'
 	 compile group: 'com.google.code.gson', name: 'gson', version: '2.7'
+	 compile group: 'org.renjin.cran', name: 'svd', version: '0.4-b4'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
