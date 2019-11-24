@@ -24,8 +24,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
     // https://mvnrepository.com/artifact/com.opencsv/opencsv
-    // https://mvnrepository.com/artifact/com.opencsv/opencsv
+
     compile group: 'com.opencsv', name: 'opencsv', version: '5.0'
+	    compile group: 'gov.nist.math', name: 'jama', version: '1.0.3'
+// https://mvnrepository.com/artifact/junit/junit
+   testCompile group: 'junit', name: 'junit', version: '4.12'
+
 	compileOnly('org.projectlombok:lombok')
 	runtimeOnly 'com.h2database:h2'
 	compile group: 'org.json', name: 'json', version: '20190722'

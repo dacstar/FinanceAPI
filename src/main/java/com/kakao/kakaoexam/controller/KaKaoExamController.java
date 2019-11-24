@@ -9,7 +9,11 @@ import java.util.Map;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.GsonJsonParser;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -22,6 +26,7 @@ import com.kakao.kakaoexam.Dto.KebDto;
 import com.kakao.kakaoexam.Dto.MaxsupplyDto;
 import com.kakao.kakaoexam.Dto.SupplyDto;
 import com.kakao.kakaoexam.Dto.Test03Dto;
+import com.kakao.kakaoexam.Dto.Test04Dto;
 import com.kakao.kakaoexam.entity.HousesupplyEntity;
 import com.kakao.kakaoexam.service.IFinanceService;
 
@@ -35,12 +40,10 @@ public class KaKaoExamController {
    private IFinanceService iFinanceService;
    
    //Data init
-   // csv ������ �о� JPA�� �̿��� ����
    @RequestMapping(value ="/init")
    public void init() throws Exception {
-      System.out.println("����");
-      int inputdate = iFinanceService.putDate();
-      if(inputdate ==0) {
+      boolean inputdate = iFinanceService.putDate();
+      if(!inputdate) {
          throw new Exception("init Error");
       }
       List<HousesupplyEntity> list = iFinanceService.getSupplyList();
@@ -50,26 +53,20 @@ public class KaKaoExamController {
    
    //test1
    @RequestMapping(value ="/test")
-   public String test() throws Exception {
+   public List<SupplyDto> exam() throws Exception {
        //주택 금융 공급현황을 출력하기 위한 Dto
        /*           출력양식을 위한 String fotmat  
         * 
         *                   */ 
 	   List<SupplyDto> supplylist = iFinanceService.getTotalsupply();
-	   
-      JsonObject js = new JsonObject();
-      JsonObject js2 = new JsonObject();
-      String name="주택금융 공급현황";
-     
+      // String sts=String.format("{\"name\":\"%s\",%s}", "주택금융 공급현황",new Gson().toJsonTree(supplylist).toString());
 
-      String sts=String.format("{\"name\":\"%s\",%s}", "주택금융 공급현황",new Gson().toJsonTree(supplylist).toString());
-
-      return  sts;
+      return  supplylist;
       
    }
    
    @RequestMapping(value ="/test2")
-   public List<MaxsupplyDto> test2() throws Exception {
+   public List<MaxsupplyDto> exam2() throws Exception {
        //주택 금융 공급현황을 출력하기 위한 Dto
        /*           출력양식을 위한 String fotmat                    */ 
 	   
@@ -84,7 +81,7 @@ public class KaKaoExamController {
    }
    
    @RequestMapping(value ="/test3")
-   public Test03Dto test3() throws Exception {
+   public Test03Dto exam3() throws Exception {
        //주택 금융 공급현황을 출력하기 위한 Dto
        /*           출력양식을 위한 String fotmat                    */ 
 	   
@@ -100,6 +97,23 @@ public class KaKaoExamController {
 
 	  
 	  return test03dto;
+      
+   }
+   @RequestMapping(value ="/test4/{bank}/{month}", method = RequestMethod.GET)
+   public Test04Dto exam4(@PathVariable("bank") String name,@PathVariable("month") int month) throws Exception {
+      Map<String,String> map = iFinanceService.name();
+
+      double res=iFinanceService.svd(iFinanceService.getMonthsupply(month-1, "kb"));
+      Test04Dto test04dto = new Test04Dto(map.get(name),2018,month,res);
+
+      System.out.println(res);
+      System.out.println(map.get("국민은행"));
+
+
+      return test04dto;
+     
+    
+
       
    }
    

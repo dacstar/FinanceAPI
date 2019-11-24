@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SupplyDto {
-	
+	private String name="주택 공급 현황";
 	private String year;
 	private int total_amount;
 	private List<Map<String,Integer>> detail_amount;

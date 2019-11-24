@@ -15,6 +15,9 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import Jama.Matrix;
+import Jama.SingularValueDecomposition;
+
 import com.kakao.kakaoexam.Dto.KebDto;
 import com.kakao.kakaoexam.Dto.MaxsupplyDto;
 import com.kakao.kakaoexam.Dto.SupplyDto;
@@ -38,7 +41,7 @@ public class FinanceService implements IFinanceService{
 
     
 	@Override
-	public int putDate() {
+	public boolean putDate() {
 		// TODO Auto-generated method stub
 		int status=1;
 		
@@ -55,11 +58,9 @@ public class FinanceService implements IFinanceService{
 				for(String[] str : list) {
 					String[] str2= new String[bank];
 					for(int i=0;i<bank;i++) {
-					str2[i]=str[i];
-					    System.out.print(str2[i]+" ");					
+					str2[i]=str[i];		
 					}
-					System.out.println();
-					
+
                     housesupplyRespository.save(new HousesupplyEntity(str2));
                 }
 
@@ -67,16 +68,18 @@ public class FinanceService implements IFinanceService{
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			status=0;
+			return false;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return false;
 		} catch (CsvException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return false;
 		}
 		
-		return status;
+		return true;
 	}
 	//
 	@Override
@@ -97,9 +100,7 @@ public class FinanceService implements IFinanceService{
         
         supplyInfIter.forEach(supplyInfList::add);
 		
-//        for(int i=0;i<supplyInfList.size();i++) {
-//        	System.out.println(supplyInfList.get(i).toString());
-//        }
+
         
 		return supplyInfList;
 	}
@@ -142,7 +143,6 @@ public class FinanceService implements IFinanceService{
 	    	  
 	    	  //제일 오래된 연도부터 연도별 공급현황 가져오기
 	         List<HousesupplyEntity>test = this.getyearTotal(i);
-	         System.out.println(test.toString());
 	         int total_amount=0;
 	         int housefund=0;
 	         int year=0;
@@ -251,9 +251,7 @@ public class FinanceService implements IFinanceService{
 		/* 전체 주택 공급량을 가져온다 */
 		List<SupplyDto> supplylist=this.getTotalsupply();
 		
-		for(int i=0;i<supplylist.size();i++) {
-			System.out.println(supplylist.get(i).toString());
-		}
+
 		List<MaxsupplyDto> maxsupplylist = new LinkedList<>();
 		
 		System.out.println(supplylist.size());
@@ -331,12 +329,10 @@ public class FinanceService implements IFinanceService{
 
 
 		//평균별 정렬
-		System.out.println("왔어!!");
+
 		Collections.sort(keblist);
 		
-		for(KebDto k: keblist) {
-			System.out.println(k.toString());
-		}
+
 		
 		return keblist;
 	}
@@ -357,6 +353,7 @@ public class FinanceService implements IFinanceService{
 		return month;
 	}
 
+	/*연도 구하기*/
 	@Override
 	public List<Integer> getYear() {
         //가장 최신과 오래된 연도를 담을 List
@@ -377,6 +374,120 @@ public class FinanceService implements IFinanceService{
 		
 		return yearlist;
 	}
+
+	//2018년도 예측값 SVD
+	@Override
+	public double svd(double[][] input) {
+	   // create M-by-N matrix that doesn't have full rank
+	   double[][] arrA = new double[13][3];
+	   double[][] arrB = input;
+	   // = {{864},{416},{263},{1659},{394},{2233},{1140},{2527},{3486},{2932},{3906},{5073},{3278}};
+	   // = new double[13][1];
+				   
+	   int year = 2005;
+	   for(int i=0; i<arrA.length; i++) {
+		  arrA[i][0] = year*year;
+		  arrA[i][1] = year;
+		  arrA[i][2] = 1;
+		  year++;
+	   }
+	   Matrix A = new Matrix(arrA);
+	   Matrix B = new Matrix(arrB);
+ 
+	   SingularValueDecomposition s = A.svd();
+	   Matrix U = s.getU();
+	   Matrix S = s.getS();
+	   Matrix V = s.getV();
+	   Matrix S_inv = S.inverse();
+	   Matrix A_pinv = V.times(S_inv.transpose());
+	   A_pinv = A_pinv.times(U.transpose());
+	   Matrix X = A_pinv.times(B);
+	   // Matrix result = A.times(X);
+ 
+	   double X_a = X.get(0,0);
+	   double X_b = X.get(1,0);
+	   double X_c = X.get(2,0);
+	   double res = X_a * 2018 * 2018 + X_b * 2018 + X_c;
+
+	   return res;
+	}
+
+	@Override
+	public double[][] getMonthsupply(int month,String bank) {
+		// TODO Auto-generated method stub
+		double[][] input = new double[13][1];
+		int count=0;
+		/* 오래된 연도와 최신연도 구하기 */
+		List<Integer> list = this.getYear();
+		/* 전체 주택 공급 현황 구하기 */
+		for(int i=list.get(0);i<=list.get(1);i++) {
+			//제일 오래된 연도부터 연도별 공급현황 가져오기
+		   List<HousesupplyEntity>test = this.getyearTotal(i);
+		   if(bank.contains("kb")){
+			String KB=test.get(month).getKb();
+			KB=KB.replace(",","");
+			System.out.println("KB"+" "+Double.parseDouble(KB));
+			input[count++][0] =Double.parseDouble(KB);
+
+		   }else if(bank.contains("woori")){
+			String Woori=test.get(month).getWoori();
+			Woori=Woori.replace(",","");
+			input[count++][0]=Double.parseDouble(Woori);
+
+		   }else if(bank.contains("sh")){
+			String Sh=test.get(month).getSh();
+			Sh=Sh.replace(",","");
+			input[count++][0]=Double.parseDouble(Sh);
+
+		   }else if(bank.contains("city")){
+			String City=test.get(month).getCity();
+			City=City.replace(",","");
+			input[count++][0]=Double.parseDouble(City);
+
+		   }else if(bank.contains("hana")){
+			String Hana=test.get(month).getHana();
+			Hana=Hana.replace(",","");
+			input[count++][0]=Double.parseDouble(Hana);
+
+		   }else if(bank.contains("nh")){
+			String Nh=test.get(month).getNh();
+			Nh=Nh.replace(",","");
+			input[count++][0]=Double.parseDouble(Nh);
+
+		   }else if(bank.contains("keb")){
+			String Keb=test.get(month).getKeb();
+			Keb=Keb.replace(",","");
+			input[count++][0]=Double.parseDouble(Keb);
+			   
+
+		   }else if(bank.contains("etc")){
+			String Etc=test.get(month).getEtc();
+			Etc=Etc.replace(",","");
+			input[count++][0]=Double.parseDouble(Etc);
+
+		   }
+
+		}
+		
+		return input;
+	}
+
+	@Override
+	public Map<String, String> name() {
+		// TODO Auto-generated method stub
+		Map<String,String> map=new HashMap<>();
+	         map.put("국민은행", "kb");
+	         map.put("우리은행", "woori");
+	         map.put("신한은행", "sh");
+	         map.put("시티은행", "city");
+	         map.put("하나은행", "hana");
+	         map.put("농협은행", "nh");
+	         map.put("외환은행", "keb");
+	         map.put("기타은행", "etc");
+		return map;
+	}
+
+	
 	
 	
 	

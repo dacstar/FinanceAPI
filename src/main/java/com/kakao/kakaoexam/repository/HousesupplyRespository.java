@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.kakao.kakaoexam.entity.HousesupplyEntity;
 
-//���ñ���.csv ������ ó���ϱ� ����  DAO Interface
+//DAO Interface
 public interface HousesupplyRespository extends CrudRepository<HousesupplyEntity,Integer> {
 	
 	

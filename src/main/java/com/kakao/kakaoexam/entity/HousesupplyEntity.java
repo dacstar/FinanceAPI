@@ -1,5 +1,7 @@
 package com.kakao.kakaoexam.entity;
 
+import java.util.Map;
+
 import javax.persistence.*;
 
 import lombok.Data;
@@ -23,7 +25,8 @@ public class HousesupplyEntity {
     private String hana; //�ϳ�
     private String nh; //����
     private String keb; //��ȯ
-    private String etc;  //��Ÿ
+	private String etc;  //��Ÿ
+	
     
     //findAll을 위한 생성자
     public HousesupplyEntity() {
@@ -43,6 +46,9 @@ public class HousesupplyEntity {
 		this.nh = str[8];
 		this.keb = str[9];
 		this.etc = str[10];
+
+
+
 	}
 
 	
