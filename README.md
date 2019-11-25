@@ -155,10 +155,12 @@ Extension(Ctrl + shift + X)에서
 ```
 
 IntelliJ
+```
 1. Git에서 Clone 한다.
 2.Lombok 라이브러리를 사용하기 위해서 FIle - Settings - Annotation Processors - Enable annotation processing
 3.Gradle 빌드를 완료한다.
 5.KaKaopayExamApplication.java를 실행
+```
 
 설치후 빌드
 
