@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Slf4j
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 public class KaKaoExamControllerTest{
 
     @Autowired
@@ -39,7 +39,6 @@ public class KaKaoExamControllerTest{
     private static boolean checkInit = false;
 
     @Autowired
-    private WebApplicationContext ctx;
     private MockMvc mockMvc;
 
     @Before
@@ -63,14 +62,14 @@ public class KaKaoExamControllerTest{
 
     @Test
     public void exam() throws Exception {
-        mockMvc.perform(get("/test.do"))
+        mockMvc.perform(get("/test"))
         .andDo(print())
         .andExpect(status().isOk());
     }
 
     @Test
     public void exam2() throws Exception {
-        mockMvc.perform(get("/test2.do"))
+        mockMvc.perform(get("/test2"))
         .andDo(print())
         .andExpect(status().isOk());
        
@@ -78,7 +77,7 @@ public class KaKaoExamControllerTest{
 
     @Test
     public void exam3() throws Exception {
-        mockMvc.perform(get("/test3.do"))
+        mockMvc.perform(get("/test3"))
         .andDo(print())
         .andExpect(status().isOk());
        
@@ -86,6 +85,9 @@ public class KaKaoExamControllerTest{
 
     @Test
     public void exam4() throws Exception {
+        mockMvc.perform(get("/test4/국민은행/2"))
+        .andDo(print())
+        .andExpect(status().isOk());
       
     }
 

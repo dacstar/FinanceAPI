@@ -54,21 +54,17 @@ public class KaKaoExamController {
    //test1
    @RequestMapping(value ="/test")
    public List<SupplyDto> exam() throws Exception {
-       //주택 금융 공급현황을 출력하기 위한 Dto
-       /*           출력양식을 위한 String fotmat  
-        * 
-        *                   */ 
+  
 	   List<SupplyDto> supplylist = iFinanceService.getTotalsupply();
-      // String sts=String.format("{\"name\":\"%s\",%s}", "주택금융 공급현황",new Gson().toJsonTree(supplylist).toString());
+  
 
       return  supplylist;
       
    }
-   
+   //exam2
    @RequestMapping(value ="/test2")
    public List<MaxsupplyDto> exam2() throws Exception {
-       //주택 금융 공급현황을 출력하기 위한 Dto
-       /*           출력양식을 위한 String fotmat                    */ 
+     
 	   
 	   List<MaxsupplyDto> maxsupplylist =iFinanceService.getMaxsupply();
 	   
@@ -79,11 +75,10 @@ public class KaKaoExamController {
       return maxsupplylist;
       
    }
-   
+   //exam3
    @RequestMapping(value ="/test3")
    public Test03Dto exam3() throws Exception {
-       //주택 금융 공급현황을 출력하기 위한 Dto
-       /*           출력양식을 위한 String fotmat                    */ 
+
 	   
 	  List<KebDto> keblist = iFinanceService.getKebavg();
      Test03Dto test03dto=new Test03Dto();
@@ -99,15 +94,16 @@ public class KaKaoExamController {
 	  return test03dto;
       
    }
+   //exam4
    @RequestMapping(value ="/test4/{bank}/{month}", method = RequestMethod.GET)
    public Test04Dto exam4(@PathVariable("bank") String name,@PathVariable("month") int month) throws Exception {
       Map<String,String> map = iFinanceService.name();
 
-      double res=iFinanceService.svd(iFinanceService.getMonthsupply(month-1, "kb"));
+      double res=iFinanceService.svd(iFinanceService.getMonthsupply(month-1, map.get(name)));
       Test04Dto test04dto = new Test04Dto(map.get(name),2018,month,res);
 
       System.out.println(res);
-      System.out.println(map.get("국민은행"));
+      System.out.println(map.get(name));
 
 
       return test04dto;
